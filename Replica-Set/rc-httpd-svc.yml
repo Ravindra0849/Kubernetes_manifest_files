@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+   name: httpd-rc
+   labels: 
+      type: myhttpd
+spec: 
+   replicas: 2
+   selector: 
+      matchLabels: 
+         type: myhttpd
+   template: 
+      metadata: 
+         name: httpd-pod
+         labels: 
+            type: myhttpd
+      spec: 
+         containers: 
+            - name: myhttpd
+              image: httpd
+---
+apiVersion: v1
+kind: Service
+metadata: 
+   name: httpd-svc
+   labels: 
+      type: myhttpd
+spec: 
+   selector: 
+      type: myhttpd
+   ports: 
+      - port: 80
+        protocol: TCP
+   type: NodePort
+...

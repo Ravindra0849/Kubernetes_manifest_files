@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Pod
+metadata: 
+   name: appserver
+   labels: 
+      type: appserver
+spec: 
+   containers: 
+      - name: appserver
+        image: nginx
+        ports: 
+           - containerPort: 80
+...

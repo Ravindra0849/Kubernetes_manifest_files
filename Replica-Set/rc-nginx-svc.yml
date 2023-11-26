@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+   name: nginx-rs
+   labels: 
+      type: appserver
+spec: 
+   replicas: 1
+   selector: 
+      matchLabels: 
+         type: appserver
+   template: 
+      metadata: 
+         name: nginx-pod
+         labels:
+            type: appserver
+      spec: 
+         containers: 
+            - name: mynginx
+              image: nginx:latest
+---
+apiVersion: v1
+kind: Service
+metadata: 
+   name: nginx-svc
+   labels: 
+      type: appserver
+spec: 
+   type: LoadBalancer
+   ports: 
+      - protocol: TCP
+        port: 80
+        nodePort: 30008
+...
