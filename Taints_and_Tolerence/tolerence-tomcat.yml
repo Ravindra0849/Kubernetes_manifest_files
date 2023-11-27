@@ -1,0 +1,52 @@
+# Before we need to taint the node the command is ==> kubectl get nodes
+#
+# kubectl taint node < node name > slave2 = worker2: NoSchedule
+#
+# the pod will not run on the specific node which is tainted here.
+#
+# if u need ti run the pod on that node also we have tolerence is one option for that. please check it once.
+#
+# This command is used for untaint the node ==> kubectl taint node < node name > slave1 = worker1: NoSchedule-
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-deployment
+  labels:
+    type: tomcat-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      type: tomcat-app
+  template:
+    metadata:
+      name: tomcat-pod
+      labels:
+        type: tomcat-app
+    spec:
+      containers:
+        - name: mytomcat
+          image: tomee
+      tolerations:
+        - key: slave2
+          operator: Equal
+          value: worker2
+          effect: NoSchedule
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-service
+  labels:
+    type: tomcat-app
+spec:
+  type: NodePort
+  selector:
+    type: tomcat-app
+  ports:
+    - targetPort: 8080
+      port: 8080
+...

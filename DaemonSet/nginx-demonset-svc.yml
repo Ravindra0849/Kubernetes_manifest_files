@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata: 
+   name: nginx-ds
+   labels: 
+      type: nginx
+spec: 
+   selector: 
+       matchLabels: 
+          type: nginx
+   template: 
+      metadata: 
+         name: nginx-pod
+         labels: 
+            type: nginx
+      spec: 
+         containers: 
+            - name: mynginx
+              image: nginx:latest
+---
+apiVersion: v1
+kind: Service
+metadata: 
+   name: nginx-svc
+   labels: 
+      type: nginx
+spec: 
+   type: NodePort
+   selector: 
+      type: nginx
+   ports: 
+      - port: 80
+        targetPort: 80
+        nodePort: 32009
+...

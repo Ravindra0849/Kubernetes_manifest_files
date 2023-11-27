@@ -1,0 +1,26 @@
+
+# before execute this commands on master ==> kubectl get nodes
+#
+# For node affinity execute this command ==> kubectl label node < node name/id > slave1 = worker1
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: httpd-pod
+  labels:
+    type: httpd-app
+spec:
+  containers:
+    - name: myhttpd
+      image: httpd
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: slave1
+                operator: In
+                values:
+                  - worker1
+...
